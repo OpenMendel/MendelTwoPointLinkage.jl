@@ -1,0 +1,16 @@
+#
+# Input and Output files.
+#
+locus_file = two-point linkage LocusFrame.txt
+pedigree_file = two-point linkage PedigreeFrame.txt
+phenotype_file = two-point linkage PhenotypeFrame.txt
+output_file = two-point linkage Output.txt
+lod-score-table = two-point linkage LOD Table Output.txt
+#
+# Analysis parameters.
+#
+analysis_option = TwoPointLinkage
+trait = RADIN
+GENDER-NEUTRAL = true
+standard_errors = true
+travel = grid
