@@ -1,0 +1,60 @@
+ 
+                Search, Julia Version
+
+            (c) Copyright Kenneth Lange, 2016
+
+Title: Two point linkage analysis between RADIN and PGM1
+Grid or search option: grid
+Minimize or maximize: maximize
+ 
+iter  steps   function    theta
+ 
+  1    0   -1.8779e+02   5.0000e-01 
+ 
+  2    0   -1.8389e+02   4.0000e-01 
+ 
+  3    0   -1.8074e+02   3.0000e-01 
+ 
+  4    0   -1.7929e+02   2.0000e-01 
+ 
+  5    0   -1.7963e+02   1.5000e-01 
+ 
+  6    0   -1.8128e+02   1.0000e-01 
+ 
+  7    0   -1.8592e+02   5.0000e-02 
+ 
+  8    0   -2.0008e+02   1.0000e-02 
+ 
+  9    0   -2.2160e+02   1.0000e-03 
+ 
+The maximum function value of -179.28896 occurs at iteration 4.
+ 
+                Search, Julia Version
+
+            (c) Copyright Kenneth Lange, 2016
+
+Title: Two point linkage analysis between RADIN and RH
+Grid or search option: grid
+Minimize or maximize: maximize
+ 
+iter  steps   function    theta
+ 
+  1    0   -1.8845e+02   5.0000e-01 
+ 
+  2    0   -1.8399e+02   4.0000e-01 
+ 
+  3    0   -1.7958e+02   3.0000e-01 
+ 
+  4    0   -1.7623e+02   2.0000e-01 
+ 
+  5    0   -1.7532e+02   1.5000e-01 
+ 
+  6    0   -1.7537e+02   1.0000e-01 
+ 
+  7    0   -1.7755e+02   5.0000e-02 
+ 
+  8    0   -1.8676e+02   1.0000e-02 
+ 
+  9    0   -2.0243e+02   1.0000e-03 
+ 
+The maximum function value of -175.32408 occurs at iteration 5.
