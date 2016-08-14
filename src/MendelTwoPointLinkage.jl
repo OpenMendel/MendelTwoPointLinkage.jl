@@ -107,7 +107,7 @@ function two_point_linkage_option(pedigree::Pedigree, person::Person,
   end
   trait_locus = 0
   for l = 1:locus.loci
-    if locus.name[l] == keyword["disease_status"]
+    if locus.name[l] == keyword["trait"]
       trait_locus = l
       break
     end
