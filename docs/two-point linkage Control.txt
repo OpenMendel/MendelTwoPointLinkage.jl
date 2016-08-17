@@ -9,7 +9,7 @@ lod-score-table = two-point linkage LOD Table Output.txt
 #
 # Analysis parameters for Two-Point Linkage option.
 #
-disease_status = RADIN
+trait = RADIN
 GENDER-NEUTRAL = true
 standard_errors = true
 travel = grid
