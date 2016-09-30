@@ -39,7 +39,7 @@ function TwoPointLinkage(control_file = ""; args...)
   # The user specifies the analysis to perform via a set of keywords.
   # Start the keywords at their default values.
   #
-  keyword = set_keyword_defaults!(Dict{ASCIIString, Any}())
+  keyword = set_keyword_defaults!(Dict{AbstractString, Any}())
   #
   # Keywords unique to this analysis should be first defined here
   # by setting their default values using the format:
@@ -94,7 +94,7 @@ This function maps a trait locus by linkage.
 function two_point_linkage_option(pedigree::Pedigree, person::Person,
   nuclear_family::NuclearFamily, locus::Locus, locus_frame::DataFrame, 
   phenotype_frame::DataFrame, pedigree_frame::DataFrame,
-  keyword::Dict{ASCIIString, Any})
+  keyword::Dict{AbstractString, Any})
 
   io = keyword["output_unit"]
   #
@@ -143,8 +143,9 @@ function two_point_linkage_option(pedigree::Pedigree, person::Person,
   #
   # Define a lod score data frame.
   #
-  lodscore_frame = DataFrame(Trait = ASCIIString[], Marker = ASCIIString[],
-    XXtheta = Float64[], XYtheta = Float64[], LodScore = Float64[])
+  lodscore_frame = DataFrame(Trait = AbstractString[],
+      Marker = AbstractString[], XXtheta = Float64[],
+      XYtheta = Float64[], LodScore = Float64[])
   #
   # Execute two-point linkage analysis over all trait-marker pairs.
   #
