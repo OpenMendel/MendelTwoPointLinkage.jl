@@ -56,7 +56,7 @@ This is a list of OpenMendel keywords specific to Two Point Linkage. A list of O
 ----------------  |  ----------------  |  ------------- |  ----------------
    gender_neutral | true               |   true, false  | Forces equal recombination fractions
    goal           |  maximize          |                |  
-   lod_score_table|Lod_Score_Frame.txt | User defined output file name  |  Creates a lod score table output file
+   lod_score_table|Lod_Score_Frame.txt | User-defined output file name  |  Creates a lod score table output file
    output_unit    |                    |                |  
    parameters     |  1                 |                |  
    points         |   9                |                |  
