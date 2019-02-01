@@ -1,21 +1,21 @@
 ### Overview
-Mendel Two Point Linkage is a component of the umbrella [OpenMendel](https://openmendel.github.io) project. This analysis option maps a trait locus using linkage analysis.
+Mendel Two Point Linkage is a component of the umbrella [OpenMendel](https://openmendel.github.io) project. This analysis option maps a trait locus using two-point linkage analysis.
 
 <!--- ### Appropriate Problems and Data Sets
 Genetic distance is proportional to the expected number of recombination events per meiosis separating two loci.
 ... --->
 
 ### Installation
-*Note: The three OpenMendel packages (1) [SnpArrays](https://openmendel.github.io/SnpArrays.jl/latest/), (2) [Search](https://openmendel.github.io/Search.jl), and (3) [MendelBase](https://openmendel.github.io/MendelBase.jl) must be installed before any other OpenMendel package will run. It is easiest if these three packages are installed in the above order and before any other OpenMendel package.*
+*Note: The three OpenMendel packages (1) [SnpArrays](https://openmendel.github.io/SnpArrays.jl/latest/), (2) [MendelSearch](https://openmendel.github.io/MendelSearch.jl), and (3) [MendelBase](https://openmendel.github.io/MendelBase.jl) must be installed before any other OpenMendel package will run. It is easiest if these three packages are installed in the above order and before any other OpenMendel package.*
 
 Within Julia, use the package manager to install MendelTwoPointLinkage:
 
-    Pkg.clone("https://github.com/OpenMendel/MendelTwoPointLinkage.jl.git")
+    pkg> add https://github.com/OpenMendel/MendelTwoPointLinkage.jl.git
 
-This package supports Julia v0.4 and v0.5.
+This package supports Julia v1.0+
 
 ### Input Files
-The Mendel Two Point Linkage analysis package uses the following input files. Example input files can be found in the [docs](https://github.com/OpenMendel/MendelTwoPointLinkage.jl/tree/master/docs) subfolder of the Mendel Two Point Linkage project. (An analysis won't always need every file type below.)
+The Mendel Two Point Linkage analysis package uses the following input files. Example input files can be found in the [data](https://github.com/OpenMendel/MendelTwoPointLinkage.jl/tree/master/data) subfolder of the Mendel Two Point Linkage project. (An analysis won't always need every file type below.)
 
 * [Control File](#control-file): Specifies the names of your data input and output files and any optional parameters (*keywords*) for the analysis. (For a list of common keywords, see [Keywords Table](#keywords-table)).
 * [Locus File](https://openmendel.github.io/MendelBase.jl/#locus-file): Names and describes the genetic loci in your data.
@@ -65,7 +65,7 @@ This is a list of OpenMendel keywords specific to Two Point Linkage. A list of O
    travel         |  grid              |                |  Mode of sampling parameter space
 
 ### Data Files
-Two Point Linkage requires a [Control file](https://openmendel.github.io/MendelBase.jl/#control-file), and a [Pedigree file](https://openmendel.github.io/MendelBase.jl/#pedigree-file). Genotype data can be included in the Pedigree file, in which case a [Locus file](https://openmendel.github.io/MendelBase.jl/#locus-file) is required. Alternatively, genotype data can be provided in a [SNP data file](https://openmendel.github.io/MendelBase.jl/#snp-data-file), in which case a [SNP Definition File](https://openmendel.github.io/MendelBase.jl/#snp-definition-file) is required. OpenMendel will also accept [PLINK format](http://zzz.bwh.harvard.edu/plink) FAM and BIM files. Details on the format and contents of the Control and data files can be found on the [MendelBase](https://openmendel.github.io/MendelBase.jl) documentation page. There are example data files in the Two Point Linkage [docs](https://github.com/OpenMendel/MendelTwoPointLinkage.jl/tree/master/docs) folder.
+Two Point Linkage requires a [Control file](https://openmendel.github.io/MendelBase.jl/#control-file), and a [Pedigree file](https://openmendel.github.io/MendelBase.jl/#pedigree-file). Genotype data can be included in the Pedigree file, in which case a [Locus file](https://openmendel.github.io/MendelBase.jl/#locus-file) is required. Alternatively, genotype data can be provided in a [SNP data file](https://openmendel.github.io/MendelBase.jl/#snp-data-file), in which case a [SNP Definition File](https://openmendel.github.io/MendelBase.jl/#snp-definition-file) is required. OpenMendel will also accept [PLINK format](http://zzz.bwh.harvard.edu/plink) FAM and BIM files. Details on the format and contents of the Control and data files can be found on the [MendelBase](https://openmendel.github.io/MendelBase.jl) documentation page. There are example data files in the Two Point Linkage [data](https://github.com/OpenMendel/MendelTwoPointLinkage.jl/tree/master/data) folder.
 
 ### Running the Analysis
 
