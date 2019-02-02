@@ -5,7 +5,7 @@ locus_file = two-point linkage LocusFrame.txt
 pedigree_file = two-point linkage PedigreeFrame.txt
 phenotype_file = two-point linkage PhenotypeFrame.txt
 output_file = two-point linkage Output.txt
-lod-score-table = two-point linkage LOD Table Output.txt
+lod-score-table = two-point linkage Output LOD Table.txt
 #
 # Analysis parameters for Two-Point Linkage option.
 #

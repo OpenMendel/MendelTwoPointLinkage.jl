@@ -1,3 +1,5 @@
+__precompile__()
+
 """
 This module orchestrates a two-point linkage analysis.
 """
@@ -6,16 +8,15 @@ module MendelTwoPointLinkage
 # Required OpenMendel packages and modules.
 #
 using MendelBase
-# using DataStructures                  # Now in MendelBase.
-# using ModelConstruction               # Now in MendelBase.
-# using ElstonStewartPreparation        # Now in MendelBase.
-# using ElstonStewartEvaluation         # Now in MendelBase.
-using Search
-using SearchSetup
+# namely: DataStructures, ModelConstruction,
+# ElstonStewartPreparation, ElstonStewartEvaluation
+using MendelSearch
+using SearchSetup   # From package MendelSearch.
 #
 # Required external modules.
 #
-using DataFrames                        # From package DataFrames.
+using CSV
+using DataFrames
 
 export TwoPointLinkage
 
@@ -24,7 +25,7 @@ This is the wrapper function for the Two-Point Linkage analysis option.
 """
 function TwoPointLinkage(control_file = ""; args...)
 
-  const TWO_POINT_LINKAGE_VERSION :: VersionNumber = v"0.1.0"
+  TWO_POINT_LINKAGE_VERSION :: VersionNumber = v"0.1.0"
   #
   # Print the logo. Store the initial directory.
   #
@@ -168,16 +169,16 @@ function two_point_linkage_option(pedigree::Pedigree, person::Person,
       continue
     end
     #
-    # Pass the variables to optimize for maximum likelihood estimation.
+    # Pass the variables to search for maximum likelihood estimation.
     #
     function fun(par)
-      copy!(parameter.par, par)
+      copyto!(parameter.par, par)
       f = elston_stewart_loglikelihood(penetrance_two_point_linkage,
         prior_two_point_linkage, transmission_two_point_linkage,
         pedigree, person, locus, parameter, instruction, keyword)
       return (f, nothing, nothing)
     end # function fun
-    (best_par, best_value) = optimize(fun, parameter)
+    (best_par, best_value) = mendel_search(fun, parameter)
     #
     # Insert the results in a data frame.
     #
@@ -200,7 +201,10 @@ function two_point_linkage_option(pedigree::Pedigree, person::Person,
       end
     end
   end
-  writetable(keyword["lod_score_table"], lodscore_frame)
+  lod_table_file = string(keyword["lod_score_table"])
+  CSV.write(lod_table_file, lodscore_frame;
+    writeheader = true, delim = keyword["output_field_separator"],
+    missingstring = keyword["output_missing_value"])
   show(lodscore_frame)
   return execution_error = false
 end # function two_point_linkage_option
@@ -270,7 +274,7 @@ function transmission_two_point_linkage(person::Person, locus::Locus,
   if length(par) == 2
     locus.theta[:, 1] = par
   elseif length(par) == 1
-    locus.theta[:, 1] = par[1]
+    locus.theta[:, 1] .= par[1]
   end
   #
   # Store an indicator of the sex of the parent.
@@ -355,6 +359,12 @@ function initialize_optimization_two_point_linkage!(locus::Locus,
   end
   return parameter
 end # function initialize_optimization_two_point_linkage!
+#
+# Method to obtain path to this package's data files
+# so they can be used in the documentation and testing routines.
+# For example, datadir("Control file.txt") will return
+# "/path/to/package/data/Control file.txt"
+#
+datadir(parts...) = joinpath(@__DIR__, "..", "data", parts...)
 
 end # module MendelTwoPointLinkage
-
