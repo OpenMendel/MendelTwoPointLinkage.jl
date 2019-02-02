@@ -1,7 +1,7 @@
  
                 Search, Julia Version
 
-            (c) Copyright Kenneth Lange, 2016
+            (c) Copyright Kenneth Lange, 2019
 
 Title: Two point linkage analysis between RADIN and PGM1
 Grid or search option: grid
@@ -31,7 +31,7 @@ The maximum function value of -179.28896 occurs at iteration 4.
  
                 Search, Julia Version
 
-            (c) Copyright Kenneth Lange, 2016
+            (c) Copyright Kenneth Lange, 2019
 
 Title: Two point linkage analysis between RADIN and RH
 Grid or search option: grid

@@ -11,12 +11,12 @@ using MendelBase
 # namely: DataStructures, ModelConstruction,
 # ElstonStewartPreparation, ElstonStewartEvaluation
 using MendelSearch
-using SearchSetup   # From package MendelSearch.
 #
 # Required external modules.
 #
 using CSV
 using DataFrames
+using LinearAlgebra
 
 export TwoPointLinkage
 
@@ -25,7 +25,7 @@ This is the wrapper function for the Two-Point Linkage analysis option.
 """
 function TwoPointLinkage(control_file = ""; args...)
 
-  TWO_POINT_LINKAGE_VERSION :: VersionNumber = v"0.1.0"
+  TWO_POINT_LINKAGE_VERSION :: VersionNumber = v"0.5.0"
   #
   # Print the logo. Store the initial directory.
   #
