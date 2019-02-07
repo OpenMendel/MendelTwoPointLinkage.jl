@@ -43,7 +43,7 @@ Below is an example of a simple Control file to run Two Point Linkage:
 	#
 	# Analysis parameters for Two-Point Linkage option.
 	#
-	disease_status = RADIN
+	trait = RADIN
 	gender-neutral = true
 	standard_errors = true
 	travel = grid
