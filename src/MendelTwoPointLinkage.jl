@@ -24,15 +24,12 @@ export TwoPointLinkage
 This is the wrapper function for the Two-Point Linkage analysis option.
 """
 function TwoPointLinkage(control_file = ""; args...)
-
-  TWO_POINT_LINKAGE_VERSION :: VersionNumber = v"0.5.0"
   #
   # Print the logo. Store the initial directory.
   #
   print(" \n \n")
   println("     Welcome to OpenMendel's")
   println("Two-Point Linkage analysis option")
-  println("         version ", TWO_POINT_LINKAGE_VERSION)
   print(" \n \n")
   println("Reading the data.\n")
   initial_directory = pwd()
@@ -67,7 +64,7 @@ function TwoPointLinkage(control_file = ""; args...)
   # Read the genetic data from the external files named in the keywords.
   #
   (pedigree, person, nuclear_family, locus, snpdata,
-    locus_frame, phenotype_frame, pedigree_frame, snp_definition_frame) =
+    locus_frame, phenotype_frame, person_frame, snp_definition_frame) =
     read_external_data_files(keyword)
   #
   # Check if SNP data were read.
@@ -80,7 +77,7 @@ function TwoPointLinkage(control_file = ""; args...)
   #
     println(" \nAnalyzing the data.\n")
     execution_error = two_point_linkage_option(pedigree, person, nuclear_family,
-      locus, locus_frame, phenotype_frame, pedigree_frame, keyword)
+      locus, locus_frame, phenotype_frame, person_frame, keyword)
     if execution_error
       println(" \n \nERROR: Mendel terminated prematurely!\n")
     else
@@ -101,7 +98,7 @@ This function maps a trait locus by linkage.
 """
 function two_point_linkage_option(pedigree::Pedigree, person::Person,
   nuclear_family::NuclearFamily, locus::Locus, locus_frame::DataFrame,
-  phenotype_frame::DataFrame, pedigree_frame::DataFrame,
+  phenotype_frame::DataFrame, person_frame::DataFrame,
   keyword::Dict{AbstractString, Any})
 
   io = keyword["output_unit"]
@@ -182,7 +179,7 @@ function two_point_linkage_option(pedigree::Pedigree, person::Person,
       copyto!(parameter.par, par)
       f = elston_stewart_loglikelihood(penetrance_two_point_linkage,
         prior_two_point_linkage, transmission_two_point_linkage,
-        pedigree, person, locus, parameter, instruction, keyword)
+        pedigree, person, locus, parameter, instruction, person_frame, keyword)
       return (f, nothing, nothing)
     end # function fun
     (best_par, best_value) = mendel_search(fun, parameter)
@@ -220,11 +217,11 @@ end # function two_point_linkage_option
 Supply a penetrance for individual i.
 """
 function penetrance_two_point_linkage(person::Person, locus::Locus,
-  multi_genotype::Matrix{Int}, par::Vector{Float64},
-  keyword::Dict{AbstractString, Any}, start::Int, finish::Int, i::Int)
+  multi_genotype::Matrix{Int}, par::Vector{Float64}, person_frame::DataFrame,
+  keyword::Dict{AbstractString, Any}, startlocus::Int, endlocus::Int, i::Int)
 
   pen = 1.0
-  for l = start:finish
+  for l = startlocus:endlocus
     allele1 = multi_genotype[1, l]
     allele2 = multi_genotype[2, l]
     loc = locus.model_locus[l]
@@ -238,20 +235,18 @@ end # function penetrance_two_point_linkage
 Supply a prior probability for founder i.
 """
 function prior_two_point_linkage(person::Person, locus::Locus,
-  multi_genotype::Matrix{Int}, par::Vector{Float64},
-  keyword::Dict{AbstractString, Any}, start::Int, finish::Int, i::Int)
+  multi_genotype::Matrix{Int}, par::Vector{Float64}, person_frame::DataFrame,
+  keyword::Dict{AbstractString, Any}, startlocus::Int, endlocus::Int, i::Int)
 
   prior_prob = 1.0
-  for l = start:finish
+  for l = startlocus:endlocus
     loc = locus.model_locus[l]
     allele = multi_genotype[1, l]
-    frequency = dot(vec(person.admixture[i, :]),
-                    vec(locus.frequency[loc][:, allele]))
+    frequency = dot(person.admixture[i, :], locus.frequency[loc][:, allele])
     prior_prob = prior_prob * frequency
     if !locus.xlinked[loc] || !person.male[i]
       allele = multi_genotype[2, l]
-      frequency = dot(vec(person.admixture[i, :]),
-                      vec(locus.frequency[loc][:, allele]))
+      frequency = dot(person.admixture[i, :], locus.frequency[loc][:, allele])
       prior_prob = prior_prob * frequency
     end
   end
@@ -264,15 +259,16 @@ genotype transmits a particular gamete to his or her child j.
 """
 function transmission_two_point_linkage(person::Person, locus::Locus,
   gamete::Vector{Int}, multi_genotype::Matrix{Int}, par::Vector{Float64},
-  keyword::Dict{AbstractString, Any}, start::Int, finish::Int, i::Int, j::Int)
+  person_frame::DataFrame, keyword::Dict{AbstractString, Any},
+  startlocus::Int, endlocus::Int, i::Int, j::Int)
   #
   # For male to male inheritance at an x-linked locus,
   # set the transmission probability equal to 1.
   #
-  loc = locus.model_locus[start]
+  loc = locus.model_locus[startlocus]
   xlinked = locus.xlinked[loc]
   if xlinked && person.male[i] && person.male[j]
-    return 1.0
+    return trans = 1.0
   end
   #
   # Equate recombination fractions to parameters for two-point linkage
@@ -303,8 +299,13 @@ function transmission_two_point_linkage(person::Person, locus::Locus,
   trans = 1.0
   found = false
   phase = true
+  #
+  # We use r as 1/2 times the running product in Trow's formula. See equation
+  # 7.10 in Mathematical and Statistical Models for Genetic Analysis, 2nd ed.
+  #
   r = 0.5
-  for l = start:finish
+  for l = startlocus:endlocus
+    loc = locus.model_locus[l]
     match1 = multi_genotype[1, l] == gamete[l]
     match2 = multi_genotype[2, l] == gamete[l]
     #
@@ -313,7 +314,7 @@ function transmission_two_point_linkage(person::Person, locus::Locus,
     # If not, then return with 0 for the transmission probability.
     #
     if !match1 && !match2
-      return 0.0
+      return trans = 0.0
     end
     #
     # Check whether the current locus is heterozygous.
@@ -321,26 +322,26 @@ function transmission_two_point_linkage(person::Person, locus::Locus,
     if match1 != match2
       if found
         if phase == match1
-          trans = trans * (0.5 + r)
+          trans = trans * (0.5 + r) # non-recombination
         else
-          trans = trans * (0.5 - r)
+          trans = trans * (0.5 - r) # recombination
         end
       else
         found = true
-        if start == 1 || start == finish
-          trans = 0.5
-        else
-          trans = 1.0
+        if startlocus == 1 || startlocus == endlocus
+          trans = 0.5 * trans
+##        else
+##          trans = 1.0
         end
       end
-      phase = match1
+      phase = match1 # restart Trow's running product
       r = 0.5
     end
-    if found && l < finish
+    if found && l < endlocus
       r = r * (1.0 - 2.0 * locus.theta[i_sex, l])
     end
   end
-  if !found; trans = 1.0; end
+##  if !found; trans = 1.0; end
   return trans
 end # function transmission_two_point_linkage
 

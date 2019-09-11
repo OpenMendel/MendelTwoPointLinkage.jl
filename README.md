@@ -10,7 +10,7 @@ This [Julia](http://julialang.org/) package performs two-point linkage analysis.
 
 Within Julia, use the package manager to install MendelTwoPointLinkage:
 
-    pkg> add https://github.com/OpenMendel/MendelTwoPointLinkage.jl.git
+    pkg> add https://github.com/OpenMendel/MendelTwoPointLinkage.jl
 
 This package supports Julia v1.0+
 

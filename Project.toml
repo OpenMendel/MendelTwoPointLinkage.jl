@@ -1,7 +1,7 @@
 name = "MendelTwoPointLinkage"
 desc = "Two Point Linkage; part of the OpenMendel project."
 uuid = "85f2c5dc-26c4-5b05-8460-7825d77aad57"
-version = "0.5.0"
+version = "0.8.0"
 license = "MIT"
 authors = ["Kenneth Lange <klange@ucla.edu>", "Eric Sobel <esobel@ucla.edu>", "OpenMendel Team"]
 keywords = ["OpenMendel", "two point linkage"]
